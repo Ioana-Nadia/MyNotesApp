@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NewNotesApp</string>
-    <string name="url">jdbc:jtds:sqlserver://10.0.2.2:1433;databasename=test;user=pioanana;password=121427;</string>>
+    <string name="url">jdbc:jtds:sqlserver://10.0.2.2:1433;databasename=test;user=pioanana;password=121427;</string>
     <string name="driver_class">net.sourceforge.jtds.jdbc.Driver</string>
     <string name="selectAll_method">selectAll</string>
+    <string name="selectTest_procedure">selectTest</string>
 </resources>
