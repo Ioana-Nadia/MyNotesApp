@@ -4,4 +4,6 @@
     <string name="driver_class">net.sourceforge.jtds.jdbc.Driver</string>
     <string name="selectAll_method">selectAll</string>
     <string name="selectTest_procedure">selectTest</string>
+    <string name="get_all_notes">getAllNotes</string>
+    <string name="added_note_confirmation">Note added successfully</string>
 </resources>

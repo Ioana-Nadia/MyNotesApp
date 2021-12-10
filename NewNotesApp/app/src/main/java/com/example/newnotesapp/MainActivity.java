@@ -1,6 +1,7 @@
 package com.example.newnotesapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -17,18 +18,28 @@ import android.widget.TextView;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     Connection connection;
     RecyclerView recycler;
+    List<Note> notes;
+    Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Notes");
+        Dao dao = new Dao();
+        this.notes = dao.getAllNotes(getApplicationContext());
         recycler = findViewById(R.id.notedList);
-        Button buttonConnect = findViewById(R.id.sqlButton);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new Adapter(this, notes);
+        recycler.setAdapter(adapter);
+
+
+        /**Button buttonConnect = findViewById(R.id.sqlButton);
         Context context = getApplicationContext();
         buttonConnect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("The error is: ", e.getMessage());
                 }
             }
-        });
+        });*/
     }
 
     @Override

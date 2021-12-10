@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -53,6 +54,7 @@ public class AddNewNote extends AppCompatActivity {
                 dao.addNote(note, getApplicationContext());
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                Toast.makeText(this, R.string.added_note_confirmation, Toast.LENGTH_SHORT).show();
             }
         }
         return super.onOptionsItemSelected(item);
