@@ -9,13 +9,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    RecyclerView recycler;
-    List<Note> notes;
-    Adapter adapter;
+    private RecyclerView recycler;
+    private List<Note> notes;
+    private Adapter adapter;
+    private Adapter.RecyclerViewClickListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +28,21 @@ public class MainActivity extends AppCompatActivity {
         this.notes = dao.getAllNotes(getApplicationContext());
         recycler = findViewById(R.id.notedList);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this, notes);
+        setOnClickListener();
+        adapter = new Adapter(this, this.notes, this.listener);
         recycler.setAdapter(adapter);
+    }
+
+    private void setOnClickListener() {
+        this.listener = new Adapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent intent = new Intent(getApplicationContext(),NoteProfileActivity.class);
+                intent.putExtra("noteTitleInfo", notes.get(position).getTitle());
+                intent.putExtra("noteContentInfo", notes.get(position).getContent());
+                startActivity(intent);
+            }
+        };
     }
 
     @Override

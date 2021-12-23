@@ -12,6 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NewNotesApp">
+        <activity android:name=".NoteProfileActivity" android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"
+                />
+        </activity>
         <activity android:name=".UIAdding" android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
