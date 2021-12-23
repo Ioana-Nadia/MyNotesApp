@@ -15,7 +15,7 @@ public class Dao {
         connection = con.classConnection(context);
         try {
             Statement stm = connection.createStatement();
-            ResultSet result = stm.executeQuery(insertStoredProcedure(note));
+            stm.executeQuery(insertStoredProcedure(note));
         }
         catch(Exception e) {
         }
@@ -42,7 +42,37 @@ public class Dao {
         }
     }
 
+    public void deleteNote(String noteTitle, Context context) {
+        SQLConnection con = new SQLConnection();
+        connection = con.classConnection(context);
+        try {
+            Statement stm = connection.createStatement();
+            stm.executeQuery(deleteStoredProcedure(noteTitle));
+        }
+        catch(Exception e) {
+        }
+    }
+
+    public void updateNote(Note note, Context context, String oldNoteTitle) {
+        SQLConnection con = new SQLConnection();
+        connection = con.classConnection(context);
+        try {
+            Statement stm = connection.createStatement();
+            stm.executeQuery(updateStoredProcedure(note, oldNoteTitle));
+        }
+        catch(Exception e) {
+        }
+    }
+
     private String insertStoredProcedure(Note note) {
         return "exec dbo.addNewNote" + " '" + note.getTitle() + "', '" + note.getContent() + "', '" + note.getDate() + "', '" + note.getTime() + "'";
+    }
+
+    private String deleteStoredProcedure(String noteTitle) {
+        return "exec dbo.deleteNote '" + noteTitle + "'";
+    }
+
+    private String updateStoredProcedure(Note note, String oldNoteTitle) {
+        return "exec dbo.updateNote" + " '" + note.getTitle() + "', '" + note.getContent() + "', '" + note.getDate() + "', '" + note.getTime() + "', '" + oldNoteTitle + "'";
     }
 }
