@@ -1,7 +1,12 @@
 package com.example.newnotesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,5 +29,33 @@ public class NoteProfileActivity extends AppCompatActivity {
         }
         noteTitle.setText(auxTitle);
         noteContent.setText(auxContent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.note_profile_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ManageUILogic logic = new ManageUILogic();
+        Intent intent = new Intent(this, MainActivity.class);
+        switch(item.getItemId()) {
+            case R.id.delete:
+                logic.processNoteDeletion(this.auxTitle, this);
+                startActivity(intent);
+                Toast.makeText(this, R.string.deleted_note_confirmation, Toast.LENGTH_SHORT).show();
+                return super.onOptionsItemSelected(item);
+            case R.id.update:
+                String oldNoteTitle = this.auxTitle;
+                logic.processNoteUpdate(oldNoteTitle, noteTitle.getText().toString(), noteContent.getText().toString(), this);
+                startActivity(intent);
+                Toast.makeText(this, R.string.updated_note_confirmation, Toast.LENGTH_SHORT).show();
+                return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
