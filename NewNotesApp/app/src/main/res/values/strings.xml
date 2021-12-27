@@ -9,4 +9,7 @@
     <string name="deleted_note_confirmation">Note deleted successfully</string>
     <string name="delete_note">deleteNote</string>
     <string name="updated_note_confirmation">Note updated successfully</string>
+    <string name="adding_alert">Title and content can\'t be empty!</string>
+    <string name="adding_alert_existence">There is already a note with this title! Choose another!</string>
+    <string name="updating_alert">The title and the content are the same as before!</string>
 </resources>

@@ -13,8 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class UIAdding extends AppCompatActivity {
-    AlertDialog.Builder alertBuilder;
-    EditText noteTitle, noteContent;
+    private AlertDialog.Builder alertBuilder;
+    private EditText noteTitle, noteContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +39,14 @@ public class UIAdding extends AppCompatActivity {
             String title = this.noteTitle.getText().toString();
             String content = this.noteContent.getText().toString();
             if (title.equals("") || content.equals("")) {
-                alert();
+                alert(R.string.adding_alert);
                 return super.onOptionsItemSelected(item);
             }
             ManageUILogic logic = new ManageUILogic();
-            logic.processNewNote(title, content, getApplicationContext());
+            if(!logic.processNewNote(title, content, getApplicationContext())) {
+                alert(R.string.adding_alert_existence);
+                return super.onOptionsItemSelected(item);
+            }
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             Toast.makeText(this, R.string.added_note_confirmation, Toast.LENGTH_SHORT).show();
@@ -51,10 +54,10 @@ public class UIAdding extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void alert() {
+    private void alert(int messageResource) {
         this.alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle("Alert!")
-                .setMessage("Title and content can't be empty!")
+                .setMessage(messageResource)
                 .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

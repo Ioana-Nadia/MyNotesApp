@@ -10,6 +10,28 @@ import java.util.List;
 public class Dao {
     Connection connection;
 
+    public boolean checkTitle(String noteTitle, Context context) {
+        Connection connection;
+        SQLConnection con = new SQLConnection();
+        connection = con.classConnection(context);
+        Object obj;
+        try {
+            Statement stm = connection.createStatement();
+            ResultSet result = stm.executeQuery(checkTitleStoredProcedure(noteTitle));
+            if(result.next()) {
+                obj =result.getString(1);
+                if(obj != null) {
+                    System.out.println("+++" + obj.toString() + "+++");
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
+
     public void addNote(Note note, Context context) {
         SQLConnection con = new SQLConnection();
         connection = con.classConnection(context);
@@ -74,5 +96,9 @@ public class Dao {
 
     private String updateStoredProcedure(Note note, String oldNoteTitle) {
         return "exec dbo.updateNote" + " '" + note.getTitle() + "', '" + note.getContent() + "', '" + note.getDate() + "', '" + note.getTime() + "', '" + oldNoteTitle + "'";
+    }
+
+    private String checkTitleStoredProcedure(String noteTitle) {
+        return "exec dbo.getTitleID '" + noteTitle + "'";
     }
 }
