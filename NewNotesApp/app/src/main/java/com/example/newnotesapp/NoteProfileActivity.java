@@ -1,5 +1,6 @@
 package com.example.newnotesapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,11 +9,14 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class NoteProfileActivity extends AppCompatActivity {
     private EditText noteTitle, noteContent;
     private String auxTitle, auxContent;
+    private AlertDialog.Builder alertBuilder;
+
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +53,28 @@ public class NoteProfileActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.deleted_note_confirmation, Toast.LENGTH_SHORT).show();
                 return super.onOptionsItemSelected(item);
             case R.id.update:
-                String oldNoteTitle = this.auxTitle;
-                logic.processNoteUpdate(oldNoteTitle, noteTitle.getText().toString(), noteContent.getText().toString(), this);
-                startActivity(intent);
-                Toast.makeText(this, R.string.updated_note_confirmation, Toast.LENGTH_SHORT).show();
+                if(logic.processNoteUpdate(this.auxTitle, this.auxContent, noteTitle.getText().toString(), noteContent.getText().toString(), this)) {
+                    startActivity(intent);
+                    Toast.makeText(this, R.string.updated_note_confirmation, Toast.LENGTH_SHORT).show();
+                    return super.onOptionsItemSelected(item);
+                }
+                alert();
                 return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void alert() {
+        this.alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("Alert!")
+                .setMessage(R.string.updating_alert)
+                .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 }
