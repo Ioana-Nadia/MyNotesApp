@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Dao {
     Connection connection;
@@ -20,10 +23,8 @@ public class Dao {
             ResultSet result = stm.executeQuery(checkTitleStoredProcedure(noteTitle));
             if(result.next()) {
                 obj =result.getString(1);
-                if(obj != null) {
-                    System.out.println("+++" + obj.toString() + "+++");
+                if(obj != null)
                     return false;
-                }
             }
             return true;
         } catch (Exception e) {
@@ -40,6 +41,7 @@ public class Dao {
             stm.executeQuery(insertStoredProcedure(note));
         }
         catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -56,6 +58,7 @@ public class Dao {
                 Note note = new Note(result.getString(2), result.getString(3), result.getString(4), result.getString(5));
                 notes.add(note);
             }
+            notes = sortNotesList(notes);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,6 +75,7 @@ public class Dao {
             stm.executeQuery(deleteStoredProcedure(noteTitle));
         }
         catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -83,7 +87,18 @@ public class Dao {
             stm.executeQuery(updateStoredProcedure(note, oldNoteTitle));
         }
         catch(Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    private List<Note> sortNotesList(List<Note> list) {
+        Comparator<Note> compareByDate = Comparator.comparing(Note::getDateFormat);
+        Comparator<Note> compareByTime = Comparator.comparing(Note::getTimeFormat);
+        Comparator<Note> compareByTitle = Comparator.comparing(Note::getTitle);
+        Comparator<Note> compareByFullName = compareByDate.thenComparing(compareByTime).thenComparing(compareByTitle);
+        list = list.stream().sorted(compareByFullName).collect(Collectors.toList());
+        Collections.reverse(list);
+        return list;
     }
 
     private String insertStoredProcedure(Note note) {
